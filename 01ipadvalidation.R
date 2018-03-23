@@ -19,9 +19,7 @@ dat_resp_ipad <- quickreadfiles(path = "data",
                 Size, Direction, Correct, Contrast) %>% 
   rename(duration = Duration, size = Size, contrast = Contrast, 
          direction = Direction, correct = Correct) %>% 
-  mutate(platform = as.character(platform)) #%>% 
- # select(session, platform, participant, duration, size, direction, correct, contrast) 
-
+  mutate(platform = as.character(platform)) 
 
 dat_resp_crt <- quickreadfiles(path = "data", 
                                participant =str_pad(1:13, 2, pad = "0"),
@@ -30,9 +28,7 @@ dat_resp_crt <- quickreadfiles(path = "data",
   dplyr::select(session, platform, participant, duration, 
                 size, direction, correct, contrast) %>% 
   mutate(size = if_else(size == 90, 4, 1),
-         platform = as.character(platform)) #%>% 
-  #select(session, platform, participant,duration, size, direction, correct, contrast)
-
+         platform = as.character(platform)) 
 
 dat_resp <- dat_resp_crt %>% 
   bind_rows(dat_resp_ipad) %>% 
@@ -55,7 +51,10 @@ models <- prob %>%
                          data = ., family = binomial(mafc.logit(2)))),
     same_slope = map(data, 
                      ~glm(cbind(k, r) ~ size + log10_duration - 1, 
-                          data = ., family = binomial(mafc.logit(2))))
+                          data = ., family = binomial(mafc.logit(2)))),
+    dev_dif_slope = map_dbl(dif_slope, "deviance"),
+    dev_same_slope = map_dbl(same_slope, "deviance"),
+    poor_fits = dev_dif_slope > dev_same_slope
   )
 
 model_comparisons <- models %>% 
@@ -63,6 +62,15 @@ model_comparisons <- models %>%
   mutate(anov2 = map2(dif_slope, same_slope, anova, test = "Chisq"),
          p.value = map_dbl(anov2, ~.$`Pr(>Chi)`[2]),
          significant = p.value < alpha)
+
+# In 3 models, the p.value is NA. These models are 
+models %>% filter(poor_fits)
+
+# In these models glm does not fit the data well as the deviance of the models
+# is larger for the model with more parameters (different slope models). 
+# We fitted these models by direct maximization of the likelihood and 
+# found that the model with identical slopes was better (not shown) that the 
+# models with the same slope. 
 
 model_same_slope <- models %>% dplyr::select(-dif_slope)
 
@@ -113,7 +121,7 @@ model_same_slope_boot <- prob_samples %>%
                           data = ., family = binomial(mafc.logit(2))))
   )
 
-### Thresholds bootstrap #### ESO VA LENTO QUE FLIPAS!!
+### Thresholds bootstrap #### ESTO VA LENTO QUE FLIPAS!!
 thresholds_boot <- model_same_slope_boot %>% 
   calculate_thresholds()
 
