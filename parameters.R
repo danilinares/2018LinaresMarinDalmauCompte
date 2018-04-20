@@ -1,4 +1,4 @@
-B <- 1000 # bootstrap samples
+B <- 2000 # bootstrap samples
 alpha <- .01
 log_duration_min <- log10(0.005)
 log_duration_max <- log10(0.3)
