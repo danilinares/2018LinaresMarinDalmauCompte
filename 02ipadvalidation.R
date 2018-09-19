@@ -1,3 +1,4 @@
+### Code to perform the analysis after the first review
 library(tidyverse)
 library(broom)
 library(psyphy)
@@ -448,8 +449,6 @@ p_ss <- ggplot(ss_long, aes(x = CRT, y = iPad)) +
 
 t.test(ss_long$CRT, ss_long$iPad, paired = TRUE)
 
-lm(CRT ~ iPad, data = ss_long) %>% confint(level = 1 - alpha)
-
 p_cor <- plot_grid(p_cor_size, 
                    p_ss, 
                    ncol = 1, 
@@ -575,7 +574,6 @@ p_size_r_iPad <- ggplot(prob_r_iPad) +
 p_size_r_iPad
 
 ### Plots: correlations
-
 thresholds_r_CRT_wide <- thresholds_r_CRT %>% 
   select(-threshold) %>% 
   spread(session, log_threshold, sep = "_") %>% 
@@ -637,14 +635,6 @@ log10_duration_seq_single <- seq(min(prob$log10_duration),
                                    length.out = 100)
 
 non_par_curves <- function(df) {
-  # bwd_min <- min(diff( df$log10_duration))
-  # bwd_max <- max(df$log10_duration) - min(df$log10_duration)
-  # 
-  # bwd <- bandwidth_cross_validation(df$k, 
-  #                                   df$n, 
-  #                                   df$log10_duration, 
-  #                                   c(bwd_min, bwd_max))$deviance
-  
   pfit <- locglmfit(log10_duration_seq_single, 
                     df$k, 
                     df$n, 
