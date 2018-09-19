@@ -1,9 +1,9 @@
-calculate_thresholds <- function(df, ...) {
+calculate_thresholds_dif <- function(df, ...) {
   group_by <- quos(...)
   
   df %>% 
-    mutate(same_slope_tidy = map(same_slope, tidy)) %>% 
-    select(-data, -same_slope) %>% 
+    mutate(dif_slope_tidy = map(dif_slope, tidy)) %>% 
+    select(-data, -dif_slope) %>% 
     unnest() %>% 
     select(-std.error, -statistic, -p.value) %>% 
     group_by(!!!group_by) %>% 

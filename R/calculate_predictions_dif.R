@@ -1,13 +1,13 @@
-calculate_predictions <- function (df, x_seq){
+calculate_predictions_dif <- function (df, x_seq){
   df %>% 
-    mutate(prob = map(same_slope,
+    mutate(prob = map(dif_slope,
                       ~tibble(.fitted = predict(., 
                                                 newdata = x_seq, 
                                                 type = "response")) %>% 
                         bind_cols(x_seq)
     )
     ) %>% 
-    dplyr::select(-data, -same_slope) %>% 
+    dplyr::select(-data, -dif_slope) %>% 
     unnest() %>% 
     mutate(duration = 10^log10_duration)
   

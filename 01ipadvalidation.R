@@ -382,6 +382,7 @@ p_ss <- ggplot(ss_long, aes(x = CRT, y = iPad)) +
   theme(legend.title = element_blank())
 
 ### t-test ####
+
 t.test(ss_long$CRT, ss_long$iPad, paired = TRUE)
 
 p_cor <- plot_grid(p_cor_size, 
