@@ -63,7 +63,7 @@ models <- prob %>%
 
 model_comparisons <- models %>% 
   group_by(participant, platform) %>% 
-  mutate(anov2 = map2(dif_slope, same_slope, anova, test = "Chisq"),
+  mutate(anov2 = map2(same_slope, dif_slope, anova, test = "Chisq"),
          p.value = map_dbl(anov2, ~.$`Pr(>Chi)`[2]),
          significant = p.value < alpha) 
   
