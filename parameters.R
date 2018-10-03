@@ -15,12 +15,12 @@ label_duration <- "Duration (s)"
 label_proportion <- "Proportion correct"
 label_size <- "Size"
 label_crt <- "Threshold on CRT (s)"
-label_ipad <- "Threshold on iPad (s)"
+label_tablet <- "Threshold on tablet (s)"
 label_platform <- "Platform"
 label_small <- "Threshold for small (s)"
 label_large <- "Threshold for large (s)"
 label_crt_ss <- "Suppression index on CRT"
-label_ipad_ss <- "Suppression index on iPad"
+label_tablet_ss <- "Suppression index on tablet"
 
 name_size <- c(`1` = "Small", `4` = "Large")
 
