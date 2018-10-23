@@ -338,7 +338,8 @@ p_cor_size <- ggplot(thresholds_long) +
                 limits = c(.008,.3)) +
   labs(x = label_crt, y = label_tablet,
        color = label_size, shape = label_size) +
-  theme(legend.text = element_text(size = 9))
+  theme(legend.text = element_text(size = 9), 
+        legend.position = c(.78, .22))
 
 p_cor_size2 <- ggplot(thresholds_long) +
   geom_abline(color = "grey", size = size_line) +
@@ -446,17 +447,15 @@ p_ss <- ggplot(ss_long, aes(x = CRT, y = tablet)) +
   scale_y_continuous(breaks = seq(0, 1, .25),
                      limits = c(0, 1)) +
   labs(x = label_crt_ss, y = label_tablet_ss) +
-  theme(legend.title = element_blank())
+  theme(legend.position =  "none")
 
 t.test(ss_long$CRT, ss_long$tablet, paired = TRUE)
 
 p_cor <- plot_grid(p_cor_size, 
                    p_ss, 
-                   ncol = 1, 
-                   labels = "AUTO",
-                   align = "v")
+                   labels = "AUTO")
 
-ggsave("figures/figure3.pdf", p_cor, width = single_column_width, height = 3.5) 
+ggsave("figures/figure3.pdf", p_cor, width = 4.5, height = 2.5) 
 
 ### Reliability across blocks ##################
 
